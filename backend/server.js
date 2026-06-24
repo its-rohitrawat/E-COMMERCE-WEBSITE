@@ -1,9 +1,29 @@
-import express from "express"
+import dotenv from "dotenv";
+dotenv.config({ quiet: true });
 
-const App =  express()
+import express from "express";
+import cors from "cors";
 
-const port = 9000;
+import { connectDB } from "./config/database.js";
+connectDB();
 
-App.listen(9000,(err)=> {
-    if(err) console.log(err), `server started at ${port}`
-})
+
+const App = express();
+
+App.use(cors())
+
+App.get("/", (req, res) => {
+  res.send("server working properly");
+});
+
+App.use("api/auth")
+
+const port = process.env.PORT || 9000;
+
+App.listen(port, (err) => {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log(`server is running on port ${port}`);
+  }
+});
