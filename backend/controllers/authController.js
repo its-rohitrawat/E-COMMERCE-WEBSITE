@@ -1,5 +1,5 @@
-import { User } from "../models/userSchema";
-import { sendMail } from "../utils/sendMail";
+import { User } from "../models/userSchema.js";
+import { sendMail } from "../utils/sendMail.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -21,8 +21,9 @@ export const registerUser = async (req, res) => {
     }
 
     const isExists = await User.findOne({ email });
+    console.log("isExists:", isExists);
 
-    if (!isExists) {
+    if (isExists) {
       return res.status(422).json({
         success: false,
         message: "user already exists with this email",
@@ -38,7 +39,7 @@ export const registerUser = async (req, res) => {
 
     //send mail to the user
 
-    const newUser = new User.create({ name, email, password: hashedPassword });
+    const newUser = await User.create({ name, email, password: hashedPassword });
 
     if (newUser) {
       const otp = Math.floor(100000 + Math.random() * 900000).toString();
@@ -52,11 +53,11 @@ export const registerUser = async (req, res) => {
       );
 
       res.status(201).json({
-        _id: User._id,
-        name: User.name,
-        email: User.email,
-        role: User.role,
-        token: generateToken(User._id),
+        _id: newUser._id,
+        name: newUser.name,
+        email: newUser.email,
+        role: newUser.role,
+        token: generateToken(newUser._id),
         message:
           "User registration successfully. Please check your email for the OTP.",
       });
@@ -84,7 +85,7 @@ export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const user = await User.find({ email });
+    const user = await User.findOne({ email });
     if (user && (await bcrypt.compare(password, user.password)))
       res.json({
         _id: user._id,

@@ -6,7 +6,7 @@ export const sendMail = async (to, subject, text) => {
       service: "Gmail",
       auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAI_PASS,
+        pass: process.env.EMAIL_PASS,
       },
     });
     const mailOptions = {
@@ -15,6 +15,8 @@ export const sendMail = async (to, subject, text) => {
       subject,
       text,
     };
+    console.log("EMAIL_USER:", process.env.EMAIL_USER);
+    console.log("EMAIL_PASS:", process.env.EMAIL_PASS);
     await transporter.sendMail(mailOptions);
   } catch (error) {
     console.error("error sending email", error);
