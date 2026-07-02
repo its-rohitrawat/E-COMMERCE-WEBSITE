@@ -6,6 +6,10 @@ import cors from "cors";
 
 import { connectDB } from "./config/database.js";
 import authRouter from "./routes/authRoutes.js";
+import products from "./routes/productsRoutes.js";
+import orders from "./routes/orderRoutes.js";
+import payment from "./routes/paymentRoutes.js";
+import analytics from "./routes/analyticsRoutes.js";
 connectDB();
 
 const App = express();
@@ -19,6 +23,10 @@ App.get("/", (req, res) => {
 });
 
 App.use("/api/auth", authRouter);
+App.use("/api/products", products);
+App.use("/api/orders", orders);
+App.use("/api/payment", payment);
+App.use("/api/analytics", analytics);
 
 const port = process.env.PORT || 9000;
 

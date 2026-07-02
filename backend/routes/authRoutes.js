@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
-router.get("/users", protect, getUser);
+router.get("/users", protect, admin, getUser);
 
 //protect will check if a user is properly login or not
 //and admin

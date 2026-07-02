@@ -46,11 +46,16 @@ export const registerUser = async (req, res) => {
 
       const message = `Welcome to our website, ${name}!! Thank you for registration, we are excited to have you!! Your OTP fpr E-COMMERCE registration is: ${otp}`;
 
-      await sendMail(
-        email,
-        `Welcome to our Website - Your OTP for registration`,
-        message,
-      );
+      try {
+        console.log("Sending email to:", email);
+        await sendMail(
+          email,
+          `Welcome to our Website - Your OTP for registration`,
+          message,
+        );
+      } catch (emailError) {
+        console.error("Email sending failed:", emailError);
+      }
 
       res.status(201).json({
         _id: newUser._id,
